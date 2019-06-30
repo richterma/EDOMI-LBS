@@ -1,5 +1,5 @@
 ###[DEF]###
-[name           = Chromecast Audio Control v1.0.0   ]
+[name           = Chromecast Audio Control v1.1.0   ]
 
 
 [e#01 option    = Enable            #init=1         ] Enable/Disable LBS.
@@ -16,19 +16,19 @@
 
 [e#11 important = URL 1                             ] URL for channel 1.
 [e#12 option    = Media Type 1      #init=audio/mp3 ] Media type for channel 1. Usually "audio/mp3".
-[e#13 option    = Default Volume 1  #init=30        ] Default volume for channel 1.
+[e#13 option    = Default Volume 1  #init=77        ] Default volume for channel 1.
 [e#14 important = URL 2                             ] URL for channel 2.
 [e#15 option    = Media Type 2      #init=audio/mp3 ] Media type for channel 2. Usually "audio/mp3".
-[e#16 option    = Default Volume 2  #init=30        ] Default volume for channel 2.
+[e#16 option    = Default Volume 2  #init=77        ] Default volume for channel 2.
 [e#17 important = URL 3                             ] URL for channel 3.
 [e#18 option    = Media Type 3      #init=audio/mp3 ] Media type for channel 3. Usually "audio/mp3".
-[e#19 option    = Default Volume 3  #init=30        ] Default volume for channel 3.
+[e#19 option    = Default Volume 3  #init=77        ] Default volume for channel 3.
 [e#20 important = URL 4                             ] URL for channel 4.
 [e#21 option    = Media Type 4      #init=audio/mp3 ] Media type for channel 4. Usually "audio/mp3".
-[e#22 option    = Default Volume 4  #init=30        ] Default volume for channel 4.
+[e#22 option    = Default Volume 4  #init=77        ] Default volume for channel 4.
 [e#23 important = URL 5                             ] URL for channel 5.
 [e#24 option    = Media Type 5      #init=audio/mp3 ] Media type for channel 5. Usually "audio/mp3".
-[e#25 option    = Default Volume 5  #init=30        ] Default volume for channel 5.
+[e#25 option    = Default Volume 5  #init=77        ] Default volume for channel 5.
 
 [e#26 option    = Reserved          #init=0         ] Reserved.
 [e#27 option    = Reserved          #init=0         ] Reserved.
@@ -227,7 +227,7 @@ $status = getChromecastStatus($inputs);
 
 // check which command triggered the execution, act accordingly.
 if ($vars[1] == 2) { // Volume
-    $volume = ($inputs[41]['value'] / 255);
+    $volume = $inputs[41]['value'];
 	writeLog($inputs, $id, 6, 'Setting Volume: ' . $volume);
     $status[0] = setVolume($inputs, $volume);
 }
@@ -295,8 +295,8 @@ if ($vars[1] == 4) { // Play
 	}
 
 	if (isset($volume) && isset($type) && isset($url)){
-		writeLog($inputs, $id, 6, 'Play: Starting playback. Selected channel: ' . $inputs[40]['value']);
-        $status[0] = setVolume($inputs, ($volume/100));
+		writeLog($inputs, $id, 6, 'Play: Starting playback. Selected channel: [' . $inputs[40]['value'] . '], Volume: [' . $volume . ']');
+        $status[0] = setVolume($inputs, $volume);
         $status[1] = startPlayback($inputs, $type, $url);
     }else {
 		writeLog($inputs, $id, 3, 'Play: Vars not set -> channel out of range?');
@@ -380,7 +380,7 @@ function getChromecastStatus($inputs) {
 }
 
 function setVolume($inputs, $volume) {
-    $volume_raw = file_get_contents('http://' . $inputs[2]['value'] . '/setDeviceVolume?address=' . $inputs[3]['value'] . '&volume=' . $volume);
+    $volume_raw = file_get_contents('http://' . $inputs[2]['value'] . '/setDeviceVolume?address=' . $inputs[3]['value'] . '&volume=' . $volume / 255);
     $volume_content = json_decode($volume_raw, true);
     return round($volume_content["status"]["volume"]["level"] * 255, 0, PHP_ROUND_HALF_DOWN);
 }
