@@ -251,22 +251,22 @@ if ($inputs[$in_condstop]['refresh'] == 1) {
 			$status[$out_status] == $statuscodes['status_idle']) {
 			if ($inputs[$in_condstop_stopped]['value'] == 1) {
 				writeLog($loggingEnabled, $id, 7, 'CondStop matches: IDLE');
-				$inputs[$in_play]['refresh'] = 1;
-				$inputs[$in_play]['value'] = 1;
+				$inputs[$in_stop]['refresh'] = 1;
+				$inputs[$in_stop]['value'] = 1;
 			}
 		}
 		else if ($status[$out_status] == $statuscodes['status_cloud']) {
 			if ($inputs[$in_condstop_cloud]['value'] == 1) {
 				writeLog($loggingEnabled, $id, 7, 'CondStop matches: CLOUD');
-				$inputs[$in_play]['refresh'] = 1;
-				$inputs[$in_play]['value'] = 1;
+				$inputs[$in_stop]['refresh'] = 1;
+				$inputs[$in_stop]['value'] = 1;
 			}
 		}
 		else if ($status[$out_status] == $statuscodes['status_local']) {
 			if ($inputs[$in_condstop_local]['value'] == 1) {
 				writeLog($loggingEnabled, $id, 7, 'CondStop matches: LOCAL');
-				$inputs[$in_play]['refresh'] = 1;
-				$inputs[$in_play]['value'] = 1;
+				$inputs[$in_stop]['refresh'] = 1;
+				$inputs[$in_stop]['value'] = 1;
 			}
 		}
 		else {
